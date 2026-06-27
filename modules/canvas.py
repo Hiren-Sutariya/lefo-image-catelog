@@ -7,7 +7,7 @@ class Canvas:
         self,
         width=800,
         height=800,
-        color=(255, 255, 255),
+        color=(255, 255, 255, 255)
     ):
 
         self.width = width
@@ -15,28 +15,35 @@ class Canvas:
         self.color = color
 
     def create(self):
+        """
+        Create a new white RGBA canvas.
+        """
 
         return Image.new(
-            "RGB",
+            "RGBA",
             (self.width, self.height),
             self.color
         )
 
     def center_image(self, canvas, image):
+        """
+        Center any image on the canvas.
+        """
 
-        # Canvas size
+        # Convert to RGBA if needed
+        if image.mode != "RGBA":
+            image = image.convert("RGBA")
+
         canvas_width = canvas.width
         canvas_height = canvas.height
 
-        # Product size
         image_width = image.width
         image_height = image.height
 
-        # Center Position
         x = (canvas_width - image_width) // 2
         y = (canvas_height - image_height) // 2
 
-        # Paste Image
-        canvas.paste(image, (x, y))
+        # Preserve transparency
+        canvas.paste(image, (x, y), image)
 
         return canvas
